@@ -11,6 +11,7 @@ defmodule CarrinhoDeCompras do
   #   Módulo para se trabalhar com enumeráveis (coleções, com a exceção de tuplas)
   # Módulos
   #   alias, import (filtro), require, use
+  # Sigils
 
   alias CarrinhoDeCompras.MyEnum
 
@@ -81,6 +82,8 @@ defmodule CarrinhoDeCompras do
     {_, %{quantidade_de_items: quantidade_de_items, valor_total: valor_total}} =
       lista_de_compras |> obter_total_da_lista()
 
+      message = ~s/Compra realizada com sucesso. Valor: #{valor_total}/
+
     # if, unless, case, cond e with
     cond do
       valor_total < 500 && meio_de_pagamento != "Debito" ->
@@ -90,7 +93,7 @@ defmodule CarrinhoDeCompras do
         {:error, %{message: "Selecione o credito como meio de pagamento!"}}
 
       true ->
-        {:ok, %{message: "Compra realizada com sucesso"}}
+        {:ok, %{message: message}}
     end
   end
 end
