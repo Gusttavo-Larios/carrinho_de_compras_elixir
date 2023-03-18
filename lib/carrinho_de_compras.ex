@@ -9,6 +9,10 @@ defmodule CarrinhoDeCompras do
   #     Map.put(mapa, :atom, value) -> inserir uma nova chave no mapa
   # Enum
   #   Módulo para se trabalhar com enumeráveis (coleções, com a exceção de tuplas)
+  # Módulos
+  #   alias, import (filtro), require, use
+
+  alias CarrinhoDeCompras.MyEnum
 
   def adicionar_item(%{id: id, nome: nome, valor: valor}, lista_de_compras) do
     lista = lista_de_compras ++ [%{id: id, nome: nome, valor: valor}]
@@ -62,14 +66,9 @@ defmodule CarrinhoDeCompras do
   end
 
   def obter_total_da_lista(lista_de_compras) do
-    lista_de_valores = Enum.map(lista_de_compras, & &1.valor)
-
-    valor_total =
-      Enum.reduce(lista_de_valores, fn primeiro_item, segundo_item ->
-        primeiro_item + segundo_item
-      end)
-
     quantidade_de_items = length(lista_de_compras)
+
+    valor_total = MyEnum.reduce_map_list(:valor, lista_de_compras)
 
     {:ok,
      %{
