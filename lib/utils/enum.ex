@@ -1,4 +1,6 @@
 defmodule CarrinhoDeCompras.MyEnum do
+  @moduledoc false
+
   import Enum
 
   def reduce_map_list(chave, lista_de_items) do

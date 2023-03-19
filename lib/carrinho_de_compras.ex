@@ -1,27 +1,28 @@
 defmodule CarrinhoDeCompras do
-  # Coleções
-  #   [] -> listas (encadeadas)
-  #   {} -> tuplas
-  #   [{:atom, variável},{:atom, variável}] -> lista de palavras chave
-  #   [atom: variável, atom: variável] -> lista de palavras chave
-  #   %{key => value, key => value} ou %{atom: value, atom: value} -> mapa
-  #     %{map | atom: value} -> atualizar chave já existente no mapa
-  #     Map.put(mapa, :atom, value) -> inserir uma nova chave no mapa
-  # Enum
-  #   Módulo para se trabalhar com enumeráveis (coleções, com a exceção de tuplas)
-  # Módulos
-  #   alias, import (filtro), require, use
-  # Sigils
-
+  @moduledoc """
+    Disponibiliza funcoes para manipular carrinhos de compras
+  """
   alias CarrinhoDeCompras.MyEnum
 
-  def adicionar_item(%{id: id, nome: nome, valor: valor}, lista_de_compras) do
-    lista = lista_de_compras ++ [%{id: id, nome: nome, valor: valor}]
+  @doc """
+  Adicionar um item ao carrinho
+
+  ## Parametros
+    - item: %{id: id, nome: nome, valor: valor}
+    - lista_de_produtos: [%{id: id, nome: nome, valor: valor}]
+
+  ## Exemplo
+    iex> CarrinhoDeCompras.adicionar_item(%{id: 2, nome: "TV", valor: 1000}, [%{id: 1, nome: "Geladeira", valor: 1500}])
+    [%{id: 1, nome: "Geladeira", valor: 1500}, %{id: 2, nome: "TV", valor: 1000}]
+
+  """
+  def adicionar_item(%{id: id, nome: nome, valor: valor}, lista_de_produtos) do
+    lista = lista_de_produtos ++ [%{id: id, nome: nome, valor: valor}]
     {:ok, lista}
   end
 
-  def remover_item(lista_de_compras, id) do
-    lista = Enum.filter(lista_de_compras, fn item -> item.id != id end)
+  def remover_item(lista_de_produtos, id) do
+    lista = Enum.filter(lista_de_produtos, fn item -> item.id != id end)
     {:ok, lista}
   end
 
@@ -30,46 +31,46 @@ defmodule CarrinhoDeCompras do
     {:ok, lista}
   end
 
-  def obter_primerio_item_da_lista(lista_de_compras) do
-    lista = hd(lista_de_compras)
+  def obter_primerio_item_da_lista(lista_de_produtos) do
+    lista = hd(lista_de_produtos)
     {:ok, lista}
   end
 
-  def obter_outros_elementos_lista(lista_de_compras) do
-    lista = tl(lista_de_compras)
+  def obter_outros_elementos_lista(lista_de_produtos) do
+    lista = tl(lista_de_produtos)
     {:ok, lista}
   end
 
-  def separar_lista(lista_de_compras) do
-    {_, hd} = obter_primerio_item_da_lista(lista_de_compras)
-    {_, tail} = obter_outros_elementos_lista(lista_de_compras)
+  def separar_lista(lista_de_produtos) do
+    {_, hd} = obter_primerio_item_da_lista(lista_de_produtos)
+    {_, tail} = obter_outros_elementos_lista(lista_de_produtos)
 
     %{:primeiro_item => hd, :resto_da_lista => tail}
   end
 
   # Pattern matching
-  def ordenar_por_preco(lista_de_compras, por_maior_preco: por_maior_preco) do
+  def ordenar_por_preco(lista_de_produtos, por_maior_preco: por_maior_preco) do
     lista =
-      Enum.sort(lista_de_compras, fn primeiro_item, segundo_item ->
+      Enum.sort(lista_de_produtos, fn primeiro_item, segundo_item ->
         primeiro_item.valor > segundo_item.valor
       end)
 
     {:ok, lista}
   end
 
-  def ordenar_por_preco(lista_de_compras) do
+  def ordenar_por_preco(lista_de_produtos) do
     lista =
-      Enum.sort(lista_de_compras, fn primeiro_item, segundo_item ->
+      Enum.sort(lista_de_produtos, fn primeiro_item, segundo_item ->
         primeiro_item.valor < segundo_item.valor
       end)
 
     {:ok, lista}
   end
 
-  def obter_total_da_lista(lista_de_compras) do
-    quantidade_de_items = length(lista_de_compras)
+  def obter_total_da_lista(lista_de_produtos) do
+    quantidade_de_items = length(lista_de_produtos)
 
-    valor_total = MyEnum.reduce_map_list(:valor, lista_de_compras)
+    valor_total = MyEnum.reduce_map_list(:valor, lista_de_produtos)
 
     {:ok,
      %{
@@ -78,9 +79,9 @@ defmodule CarrinhoDeCompras do
      }}
   end
 
-  def realizar_compra(lista_de_compras, meio_de_pagamento) do
+  def realizar_compra(lista_de_produtos, meio_de_pagamento) do
     {_, %{quantidade_de_items: quantidade_de_items, valor_total: valor_total}} =
-      lista_de_compras |> obter_total_da_lista()
+      lista_de_produtos |> obter_total_da_lista()
 
       message = ~s/Compra realizada com sucesso. Valor: #{valor_total}/
 
