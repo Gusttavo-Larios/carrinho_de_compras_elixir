@@ -79,6 +79,16 @@ defmodule CarrinhoDeCompras do
      }}
   end
 
+  def obter_nome_do_produto(lista_de_produtos) do
+    # comprehensions simples
+    for item <- lista_de_produtos, do: item.nome
+  end
+
+  def obter_produtos_baratos(lista_de_produtos) do
+    # comprehensions com filtro
+    for item <- lista_de_produtos, item.valor < 900, do: item
+  end
+
   def realizar_compra(lista_de_produtos, meio_de_pagamento) do
     {_, %{quantidade_de_items: quantidade_de_items, valor_total: valor_total}} =
       lista_de_produtos |> obter_total_da_lista()

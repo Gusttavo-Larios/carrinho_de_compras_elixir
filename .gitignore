@@ -24,3 +24,5 @@ carrinho_de_compras-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+mix.lock
